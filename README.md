@@ -17,6 +17,12 @@ Para visualizar localmente, basta abrir os arquivos HTML no navegador:
 
 ## Deploy no EasyPanel
 
+📖 **[Guia Completo de Deploy no EasyPanel](./DEPLOY_EASYPANEL.md)** - Instruções detalhadas passo-a-passo
+
+### Resumo Rápido
+
+**IMPORTANTE**: Configure a porta ANTES do primeiro deploy para evitar que o container seja desligado!
+
 ### Pré-requisitos
 
 - Acesso ao EasyPanel na sua VPS
@@ -38,18 +44,31 @@ Para visualizar localmente, basta abrir os arquivos HTML no navegador:
 - **Dockerfile Path**: `./Dockerfile` (ou deixe vazio se o Dockerfile estiver na raiz)
 - **Domain**: Configure seu domínio ou subdomínio
 
-#### 3. Configuração de Porta (IMPORTANTE!)
+#### 3. Configuração de Porta (⚠️ CRÍTICO!)
 
-Após criar o serviço, você DEVE configurar a porta manualmente:
+**IMPORTANTE**: O container será desligado automaticamente se a porta não for configurada!
 
-1. No menu lateral esquerdo, vá em **"Implantações"** (Deployments)
-2. Role até encontrar a seção **"Portas"** ou **"Ports"**
-3. Configure:
-   - **Container Port**: `80`
-   - **Protocol**: `HTTP`
-4. Salve as alterações
+Você verá nos logs algo como:
+```
+[notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+```
 
-**Nota**: Se o container estiver sendo desligado ou recebendo SIGQUIT, é porque a porta não foi configurada corretamente.
+Para corrigir, siga estes passos **EXATAMENTE**:
+
+1. Após criar o serviço no EasyPanel, **NÃO clique em Deploy ainda**
+2. No **painel do serviço**, procure no menu lateral esquerdo por:
+   - **"Implantações"** ou **"Deployments"** ou
+   - **"Settings"** → **"Ports"** ou
+   - Aba **"Ports"** diretamente
+3. Adicione uma nova porta clicando em **"Add Port"** ou **"+ Port"**
+4. Configure:
+   - **Container Port**: `80` (obrigatório)
+   - **Protocol**: `HTTP` ou `TCP`
+   - **Published Port**: Deixe vazio ou automático
+5. Clique em **"Save"** ou **"Salvar"**
+6. **Agora sim**, faça o deploy ou redeploy
+
+**Verificação**: Após o deploy, verifique os logs. O Nginx deve continuar rodando sem receber SIGQUIT.
 
 #### 4. Variáveis de Ambiente
 
@@ -111,12 +130,39 @@ Para atualizar o CV:
 
 ### Container sendo desligado (SIGQUIT)
 
-**Problema**: O container é iniciado mas logo em seguida é desligado.
+**Problema**: O container é iniciado mas após 2-3 segundos é desligado.
 
-**Solução**: Verifique se a porta foi configurada corretamente:
-1. Vá em **Implantações** > **Portas**
-2. Configure **Container Port: 80** e **Protocol: HTTP**
-3. Salve e faça redeploy
+**Logs mostram**:
+```
+2025/10/26 05:32:15 [notice] 1#1: start worker processes
+2025/10/26 05:32:18 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+```
+
+**Causa**: O EasyPanel não sabe em qual porta o container está escutando.
+
+**Solução passo-a-passo**:
+
+1. **Acesse o painel do serviço no EasyPanel**
+2. **Localize a configuração de portas**:
+   - Procure no menu lateral esquerdo
+   - Pode estar em: "Implantações", "Deployments", "Settings", ou "Ports"
+3. **Adicione a porta**:
+   - Clique em "Add Port" ou "+ Port" ou "Adicionar Porta"
+   - **Container Port**: `80`
+   - **Protocol**: Selecione `HTTP` (preferível) ou `TCP`
+   - **Published Port**: Deixe vazio/automático ou `80`
+4. **Salve a configuração**
+5. **Faça o redeploy**:
+   - Vá em "Deployments" ou "Implantações"
+   - Clique em "Redeploy" ou "Deploy novamente"
+6. **Verifique os logs**:
+   - Os logs devem mostrar o Nginx rodando continuamente
+   - NÃO deve aparecer mensagem de SIGQUIT
+
+**Como verificar se a porta está configurada**:
+- No painel do serviço, procure por "Ports" ou "Portas"
+- Deve haver uma entrada com "Container Port: 80"
+- Se não houver, adicione conforme passos acima
 
 ### Warning de MIME type duplicado
 
