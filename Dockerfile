@@ -2,8 +2,8 @@
 FROM nginx:alpine
 
 # Copiar arquivos HTML para o diretório padrão do Nginx
-COPY index-pt.html /usr/share/nginx/html/
-COPY index-en.html /usr/share/nginx/html/
+COPY pt.html /usr/share/nginx/html/
+COPY index.html /usr/share/nginx/html/
 
 # Copiar configuração customizada do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
