@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexandre Paim - Currículo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); display: grid; grid-template-columns: 320px 1fr; }
+        .sidebar { background: #f8f9fa; padding: 40px 30px; border-right: 1px solid #e0e0e0; }
+        .profile { margin-bottom: 30px; }
+        .profile h1 { font-size: 32px; color: #2c3e50; margin-bottom: 10px; font-weight: 700; }
+        .profile .subtitle { color: #3498db; font-size: 14px; font-weight: 600; margin-bottom: 25px; line-height: 1.5; }
+        .contact-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 13px; color: #555; }
+        .contact-item svg { flex-shrink: 0; margin-top: 2px; }
+        .contact-item a { color: #3498db; text-decoration: none; word-break: break-all; }
+        .section-title { font-size: 16px; color: #2c3e50; font-weight: 700; margin: 30px 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .skill-group { margin-bottom: 20px; }
+        .skill-group h4 { font-size: 14px; color: #2c3e50; margin-bottom: 10px; font-weight: 600; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill-tag { background: #e3f2fd; color: #1976d2; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; }
+        .education-item { margin-bottom: 20px; }
+        .education-item h4 { font-size: 13px; color: #2c3e50; margin-bottom: 5px; font-weight: 600; }
+        .education-item p { font-size: 12px; color: #666; line-height: 1.5; }
+        .education-item .year { font-size: 12px; color: #999; font-style: italic; }
+        .language-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
+        .language-item .lang { font-weight: 600; color: #2c3e50; }
+        .language-item .level { color: #666; }
+        .main-content { padding: 40px; }
+        .main-section { margin-bottom: 35px; }
+        .main-section-title { font-size: 20px; color: #2c3e50; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .summary-text { font-size: 14px; line-height: 1.8; color: #444; text-align: justify; }
+        .summary-text p { margin-bottom: 12px; }
+        .experience-item { margin-bottom: 30px; }
+        .experience-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .experience-item h3 { font-size: 18px; color: #2c3e50; margin-bottom: 5px; font-weight: 700; }
+        .company-name { color: #3498db; font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+        .period { color: #999; font-size: 13px; font-style: italic; white-space: nowrap; }
+        .experience-item ul { margin-left: 20px; margin-top: 10px; }
+        .experience-item li { margin-bottom: 8px; font-size: 14px; color: #555; line-height: 1.6; }
+        .highlight-box { background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); padding: 20px; border-radius: 8px; border-left: 4px solid #3498db; margin: 20px 0; }
+        .highlight-box h3 { color: #1976d2; font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .highlight-box ul { list-style: none; }
+        .highlight-box li { padding: 6px 0; font-size: 13px; color: #444; line-height: 1.6; }
+        .highlight-box li:before { content: "✓"; color: #3498db; font-weight: bold; margin-right: 8px; }
+        .cert-group { margin-bottom: 25px; }
+        .cert-group h4 { color: #3498db; font-size: 16px; margin-bottom: 15px; }
+        .cert-item { background: #f8f9fa; padding: 12px 15px; margin-bottom: 10px; border-radius: 6px; border-left: 3px solid #3498db; }
+        .cert-item h5 { font-size: 14px; color: #2c3e50; margin-bottom: 4px; font-weight: 600; }
+        .cert-item p { font-size: 12px; color: #666; }
+        .differentials ul { list-style: none; }
+        .differentials li { padding: 8px 0; font-size: 14px; color: #555; line-height: 1.6; }
+        .differentials li:before { content: "▸"; color: #3498db; font-weight: bold; margin-right: 10px; }
+        .print-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 50px; padding: 15px 30px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 10px; }
+        .print-button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6); }
+        @media print { body { background: white; } .container { box-shadow: none; } .print-button { display: none; } }
+        @media (max-width: 968px) { .container { grid-template-columns: 1fr; } .sidebar { border-right: none; border-bottom: 1px solid #e0e0e0; } .print-button { bottom: 20px; right: 20px; padding: 12px 24px; font-size: 14px; } }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Imprimir / Baixar PDF
+    </button>
+    <div class="container">
+        <div class="sidebar">
+            <div class="profile">
+                <h1>ALEXANDRE<br>PAIM</h1>
+                <div class="subtitle">Tech Lead & Desenvolvedor Full Stack Senior | Mobile & Web</div>
+                <div class="contact-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Belo Horizonte, MG</span></div>
+                <div class="contact-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><span>(31) 99433-8907</span></div>
+                <div class="contact-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:alexandresafarpaim@gmail.com">alexandresafarpaim@gmail.com</a></div>
+                <div class="contact-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg><a href="https://linkedin.com/in/alexandresafarpaim">linkedin.com/in/alexandresafarpaim</a></div>
+                <div class="contact-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><a href="https://github.com/alexandreSafarPaim">github.com/alexandreSafarPaim</a></div>
+            </div>
+            <h2 class="section-title">Competências</h2>
+            <div class="skill-group"><h4>Liderança & Arquitetura</h4><div class="skill-tags"><span class="skill-tag">Liderança técnica</span><span class="skill-tag">Mentoria</span><span class="skill-tag">Clean Architecture</span><span class="skill-tag">SOLID</span><span class="skill-tag">Code Review</span><span class="skill-tag">Gestão de Backlog</span></div></div>
+            <div class="skill-group"><h4>Mobile Development</h4><div class="skill-tags"><span class="skill-tag">Flutter</span><span class="skill-tag">Dart</span><span class="skill-tag">Provider</span><span class="skill-tag">Bloc</span><span class="skill-tag">Riverpod</span><span class="skill-tag">iOS & Android</span><span class="skill-tag">Deploy Stores</span></div></div>
+            <div class="skill-group"><h4>Front-end Web</h4><div class="skill-tags"><span class="skill-tag">React.js</span><span class="skill-tag">Next.js</span><span class="skill-tag">TypeScript</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML5/CSS3</span><span class="skill-tag">SSR/SSG</span><span class="skill-tag">UI/UX</span></div></div>
+            <div class="skill-group"><h4>Back-end</h4><div class="skill-tags"><span class="skill-tag">Laravel (PHP)</span><span class="skill-tag">Node.js</span><span class="skill-tag">Express</span><span class="skill-tag">API REST</span><span class="skill-tag">Microservices</span><span class="skill-tag">Autenticação</span></div></div>
+            <div class="skill-group"><h4>Banco de Dados</h4><div class="skill-tags"><span class="skill-tag">MySQL</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Modelagem</span><span class="skill-tag">Otimização</span><span class="skill-tag">SQL Avançado</span></div></div>
+            <div class="skill-group"><h4>DevOps & Infra</h4><div class="skill-tags"><span class="skill-tag">Docker</span><span class="skill-tag">Git & GitFlow</span><span class="skill-tag">CI/CD</span><span class="skill-tag">AWS</span><span class="skill-tag">Testes</span><span class="skill-tag">Monitoramento</span></div></div>
+            <h2 class="section-title">Formação</h2>
+            <div class="education-item"><h4>Bacharelado em Odontologia</h4><p>Pontifícia Universidade Católica de Minas Gerais (PUC Minas)</p><p class="year">2010 - 2014</p></div>
+            <h2 class="section-title">Idiomas</h2>
+            <div class="language-item"><span class="lang">Português</span><span class="level">Nativo</span></div>
+            <div class="language-item"><span class="lang">Inglês</span><span class="level">Intermediário (em estudo)</span></div>
+        </div>
+        <div class="main-content">
+            <div class="main-section">
+                <h2 class="main-section-title">Resumo Profissional</h2>
+                <div class="summary-text">
+                    <p>Tech Lead e Desenvolvedor Full Stack Senior com mais de <strong>4 anos de experiência</strong> liderando equipes multidisciplinares e entregando soluções digitais escaláveis e de alto impacto. Especialista em arquitetura de software, com domínio avançado em <strong>Flutter, React, Next.js e Laravel</strong>.</p>
+                    <p>Atualmente expandindo expertise em <strong>Inteligência Artificial e automação de processos</strong>, com foco no desenvolvimento de agentes inteligentes e workflows automatizados usando <strong>n8n avançado</strong>. Mentorado oficial da <strong>Buscar ID</strong> em IA e Automação (2025-2026).</p>
+                    <p>Transição de carreira bem-sucedida (Odontologia → Tecnologia) que agregou habilidades únicas de <strong>comunicação, gestão de pessoas e visão de negócio</strong> ao perfil técnico.</p>
+                </div>
+            </div>
+            <div class="main-section">
+                <h2 class="main-section-title">Experiência Profissional</h2>
+                <div class="experience-item"><div class="experience-header"><div><h3>Tech Lead</h3><div class="company-name">Pentagrama Consultoria e Sistemas LTDA</div></div><div class="period">Nov 2023 - Presente</div></div><ul><li>Liderança técnica de equipe com <strong>5+ desenvolvedores</strong> em projetos web e mobile de alta complexidade.</li><li>Definição de <strong>arquitetura de software</strong> e escolha de stack tecnológico para novos projetos.</li><li>Implementação de <strong>boas práticas</strong>: Clean Architecture, SOLID, Design Patterns, TDD.</li><li>Condução de <strong>code reviews estruturados</strong> e mentoria técnica contínua.</li><li>Implementação de <strong>pipelines CI/CD</strong> com redução de 40% no tempo de deployment.</li><li>Desenvolvimento de <strong>soluções de automação com IA</strong> usando n8n.</li></ul></div>
+                <div class="experience-item"><div class="experience-header"><div><h3>Desenvolvedor Web/Mobile Pleno</h3><div class="company-name">Pentagrama Consultoria e Sistemas LTDA</div></div><div class="period">Out 2022 - Dez 2023</div></div><ul><li>Desenvolvimento de <strong>aplicações web escaláveis</strong> com React, Next.js e Laravel.</li><li>Criação de <strong>apps mobile multiplataforma</strong> com Flutter.</li><li>Integração de <strong>APIs REST</strong> e desenvolvimento de backends robustos.</li></ul></div>
+                <div class="experience-item"><div class="experience-header"><div><h3>Desenvolvedor Web/Mobile Júnior</h3><div class="company-name">Pentagrama Consultoria e Sistemas LTDA</div></div><div class="period">Jan 2021 - Out 2022</div></div><ul><li>Desenvolvimento frontend com React e Next.js e backend em Laravel.</li><li>Integração com APIs externas e bancos de dados relacionais.</li></ul></div>
+            </div>
+            <div class="highlight-box"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>IA & Automação (Expertise Avançada)</h3><ul><li><strong>n8n Avançado:</strong> Desenvolvimento de workflows complexos de automação</li><li><strong>Agentes de IA:</strong> Criação de agentes inteligentes para processos de negócio</li><li><strong>LLMs:</strong> Integração de Large Language Models em aplicações</li><li><strong>Mentorado Buscar ID:</strong> Programa de 1 ano em IA e Automação (2025-2026)</li></ul></div>
+            <div class="main-section">
+                <h2 class="main-section-title">Certificações & Cursos</h2>
+                <div class="cert-group"><h4>Inteligência Artificial & Automação</h4>
+                    <div class="cert-item"><h5>Programa de Mentoria em IA e Automação - Buscar ID</h5><p>Mentorado Oficial | Out 2025 - Out 2026 (1 ano)</p></div>
+                    <div class="cert-item"><h5>Imersão "IAfique-se ou Morra"</h5><p>Buscar ID | Set 2025 | 16 horas</p></div>
+                    <div class="cert-item"><h5>Agentes de IA com n8n</h5><p>LinkedIn Learning | 2024</p></div>
+                    <div class="cert-item"><h5>Curso Avançado de n8n</h5><p>LinkedIn Learning | 2024</p></div>
+                </div>
+                <div class="cert-group"><h4>Desenvolvimento</h4>
+                    <div class="cert-item"><h5>Flutter Certified Application Developer</h5><p>Certificação Oficial | 2023</p></div>
+                    <div class="cert-item"><h5>Aprenda Flutter - Android e iOS</h5><p>Curso Completo | 2022</p></div>
+                    <div class="cert-item"><h5>React.js + Next.js: Básico ao Avançado</h5><p>2023</p></div>
+                    <div class="cert-item"><h5>Rock .NET 5 Entity Framework</h5><p>Rocketseat | 2022</p></div>
+                </div>
+            </div>
+            <div class="main-section differentials">
+                <h2 class="main-section-title">Diferenciais</h2>
+                <ul><li>Transição de carreira bem-sucedida demonstrando aprendizado rápido.</li><li>Experiência em consultoria com múltiplos clientes e projetos simultâneos.</li><li>Visão de negócio aliada à expertise técnica profunda.</li><li>Habilidades interpessoais aplicadas à liderança técnica.</li><li>Especialização em IA como mentorado da Buscar ID (2025-2026).</li><li>Foco em entrega de valor e impacto mensurável.</li></ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
