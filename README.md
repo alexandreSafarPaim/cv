@@ -17,6 +17,12 @@ Para visualizar localmente, basta abrir os arquivos HTML no navegador:
 
 ## Deploy no EasyPanel
 
+📖 **[Guia Completo de Deploy no EasyPanel](./DEPLOY_EASYPANEL.md)** - Instruções detalhadas passo-a-passo
+
+### Resumo Rápido
+
+**IMPORTANTE**: Configure a porta ANTES do primeiro deploy para evitar que o container seja desligado!
+
 ### Pré-requisitos
 
 - Acesso ao EasyPanel na sua VPS
@@ -38,18 +44,26 @@ Para visualizar localmente, basta abrir os arquivos HTML no navegador:
 - **Dockerfile Path**: `./Dockerfile` (ou deixe vazio se o Dockerfile estiver na raiz)
 - **Domain**: Configure seu domínio ou subdomínio
 
-#### 3. Configuração de Porta (IMPORTANTE!)
+#### 3. Configuração de Domínio (⚠️ CRÍTICO!)
 
-Após criar o serviço, você DEVE configurar a porta manualmente:
+**IMPORTANTE**: Para aplicações web, use a aba **"Domínios"**, NÃO a aba "Portas".
 
-1. No menu lateral esquerdo, vá em **"Implantações"** (Deployments)
-2. Role até encontrar a seção **"Portas"** ou **"Ports"**
+**A aba "Portas" é apenas para aplicações não-web.**
+
+Para configurar o proxy HTTP/HTTPS:
+
+1. No painel do serviço, vá para a aba **"Domínios"**
+2. Clique em **"Add Domain"** ou **"+ Domínio"**
 3. Configure:
-   - **Container Port**: `80`
-   - **Protocol**: `HTTP`
-4. Salve as alterações
+   - **Domain**: `seu-dominio.com.br`
+   - **Path**: `/`
+   - **Target**: `http://<nome-do-servico>:80/`
+     - Exemplo: `http://site_cv:80/`
+     - Use o nome EXATO do seu serviço no EasyPanel
+4. Ative **HTTPS/SSL** (opcional mas recomendado)
+5. Salve e faça o deploy
 
-**Nota**: Se o container estiver sendo desligado ou recebendo SIGQUIT, é porque a porta não foi configurada corretamente.
+**Verificação**: O formato do Target deve ser `http://nome-servico:80/` onde `nome-servico` é o nome do seu serviço no EasyPanel.
 
 #### 4. Variáveis de Ambiente
 
@@ -111,12 +125,37 @@ Para atualizar o CV:
 
 ### Container sendo desligado (SIGQUIT)
 
-**Problema**: O container é iniciado mas logo em seguida é desligado.
+**Problema**: O container é iniciado mas após 2-3 segundos é desligado.
 
-**Solução**: Verifique se a porta foi configurada corretamente:
-1. Vá em **Implantações** > **Portas**
-2. Configure **Container Port: 80** e **Protocol: HTTP**
-3. Salve e faça redeploy
+**Logs mostram**:
+```
+2025/10/26 05:32:15 [notice] 1#1: start worker processes
+2025/10/26 05:32:18 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+```
+
+**Possíveis Causas e Soluções**:
+
+#### 1. Proxy não configurado na aba Domínios
+
+**Verificar**:
+1. Vá para aba **"Domínios"** no painel do serviço
+2. Deve haver um domínio configurado com:
+   - **Target**: `http://<nome-servico>:80/`
+   - Exemplo: `http://site_cv:80/`
+
+**Solução**: Se não estiver configurado, siga a [seção de Configuração de Domínio](#3-configuração-de-domínio-️-crítico)
+
+#### 2. Nome do serviço incorreto no Target
+
+**Verificar**: O nome no Target (`site_cv` em `http://site_cv:80/`) corresponde ao nome do serviço?
+
+**Solução**: Use o nome EXATO do serviço. Verifique no topo da página do painel.
+
+#### 3. Health check falhando
+
+**Solução**: Faça um redeploy com a versão mais recente do código (que inclui endpoint `/health`)
+
+Para mais detalhes, consulte o [Guia Completo de Deploy](./DEPLOY_EASYPANEL.md).
 
 ### Warning de MIME type duplicado
 
