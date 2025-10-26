@@ -36,18 +36,31 @@ Para visualizar localmente, basta abrir os arquivos HTML no navegador:
 
 - **Build Method**: Dockerfile
 - **Dockerfile Path**: `./Dockerfile` (ou deixe vazio se o Dockerfile estiver na raiz)
-- **Port**: 80
 - **Domain**: Configure seu domínio ou subdomínio
 
-#### 3. Variáveis de Ambiente
+#### 3. Configuração de Porta (IMPORTANTE!)
+
+Após criar o serviço, você DEVE configurar a porta manualmente:
+
+1. No menu lateral esquerdo, vá em **"Implantações"** (Deployments)
+2. Role até encontrar a seção **"Portas"** ou **"Ports"**
+3. Configure:
+   - **Container Port**: `80`
+   - **Protocol**: `HTTP`
+4. Salve as alterações
+
+**Nota**: Se o container estiver sendo desligado ou recebendo SIGQUIT, é porque a porta não foi configurada corretamente.
+
+#### 4. Variáveis de Ambiente
 
 Não são necessárias variáveis de ambiente para este projeto.
 
-#### 4. Deploy
+#### 5. Deploy
 
 1. Clique em **"Deploy"** ou **"Create"**
 2. Aguarde o build e deploy do container
-3. Acesse seu domínio configurado
+3. Verifique se a porta foi configurada corretamente (passo 3)
+4. Acesse seu domínio configurado
 
 ### Rotas Disponíveis
 
@@ -91,6 +104,31 @@ Para atualizar o CV:
 1. Edite os arquivos `index-pt.html` e/ou `index-en.html`
 2. Commit e push para o repositório
 3. No EasyPanel, clique em **"Redeploy"** ou configure deploy automático
+
+## Troubleshooting
+
+### Container sendo desligado (SIGQUIT)
+
+**Problema**: O container é iniciado mas logo em seguida é desligado.
+
+**Solução**: Verifique se a porta foi configurada corretamente:
+1. Vá em **Implantações** > **Portas**
+2. Configure **Container Port: 80** e **Protocol: HTTP**
+3. Salve e faça redeploy
+
+### Warning de MIME type duplicado
+
+**Problema**: Logs mostram warning sobre `text/html` duplicado.
+
+**Solução**: Este problema já foi corrigido no `nginx.conf`. O tipo `text/html` foi removido da configuração `gzip_types` pois já é incluído por padrão pelo Nginx.
+
+### Site não carrega após deploy
+
+**Verificações**:
+1. Verifique se a porta 80 está configurada corretamente
+2. Verifique se o domínio está apontando para o servidor correto
+3. Verifique os logs do container no EasyPanel
+4. Teste acessar via IP da VPS para descartar problemas de DNS
 
 ## Suporte
 
