@@ -12,8 +12,8 @@ Currículo profissional disponível em português e inglês.
 ## Acesso Local
 
 Para visualizar localmente, basta abrir os arquivos HTML no navegador:
-- `index-pt.html` - Versão em Português
-- `index-en.html` - Versão em Inglês
+- `pt.html` - Versão em Português
+- `index.html` - Versão em Inglês (padrão)
 
 ## Deploy no EasyPanel
 
@@ -66,8 +66,10 @@ Não são necessárias variáveis de ambiente para este projeto.
 
 Após o deploy, você terá acesso às seguintes rotas:
 
-- `/` ou `/pt` - Versão em Português (padrão)
-- `/en` - Versão em Inglês
+- `/` - Versão em Inglês (padrão)
+- `/pt` - Versão em Português
+
+**Navegação entre idiomas**: Cada página possui um botão flutuante verde no canto inferior esquerdo para alternar entre os idiomas.
 
 ## Desenvolvimento Local com Docker
 
@@ -81,16 +83,16 @@ docker build -t cv-alexandre .
 docker run -d -p 8080:80 cv-alexandre
 
 # Acessar no navegador
-# http://localhost:8080 (Português)
-# http://localhost:8080/en (Inglês)
+# http://localhost:8080 (Inglês - padrão)
+# http://localhost:8080/pt (Português)
 ```
 
 ## Estrutura do Projeto
 
 ```
 cv/
-├── index-pt.html          # CV em Português
-├── index-en.html          # CV em Inglês
+├── pt.html                # CV em Português
+├── index.html             # CV em Inglês (padrão)
 ├── Dockerfile             # Configuração Docker
 ├── nginx.conf             # Configuração do Nginx
 ├── .dockerignore          # Arquivos ignorados no build
@@ -101,7 +103,7 @@ cv/
 
 Para atualizar o CV:
 
-1. Edite os arquivos `index-pt.html` e/ou `index-en.html`
+1. Edite os arquivos `pt.html` e/ou `index.html`
 2. Commit e push para o repositório
 3. No EasyPanel, clique em **"Redeploy"** ou configure deploy automático
 
