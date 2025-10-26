@@ -44,31 +44,26 @@ Para visualizar localmente, basta abrir os arquivos HTML no navegador:
 - **Dockerfile Path**: `./Dockerfile` (ou deixe vazio se o Dockerfile estiver na raiz)
 - **Domain**: Configure seu domínio ou subdomínio
 
-#### 3. Configuração de Porta (⚠️ CRÍTICO!)
+#### 3. Configuração de Domínio (⚠️ CRÍTICO!)
 
-**IMPORTANTE**: O container será desligado automaticamente se a porta não for configurada!
+**IMPORTANTE**: Para aplicações web, use a aba **"Domínios"**, NÃO a aba "Portas".
 
-Você verá nos logs algo como:
-```
-[notice] 1#1: signal 3 (SIGQUIT) received, shutting down
-```
+**A aba "Portas" é apenas para aplicações não-web.**
 
-Para corrigir, siga estes passos **EXATAMENTE**:
+Para configurar o proxy HTTP/HTTPS:
 
-1. Após criar o serviço no EasyPanel, **NÃO clique em Deploy ainda**
-2. No **painel do serviço**, procure no menu lateral esquerdo por:
-   - **"Implantações"** ou **"Deployments"** ou
-   - **"Settings"** → **"Ports"** ou
-   - Aba **"Ports"** diretamente
-3. Adicione uma nova porta clicando em **"Add Port"** ou **"+ Port"**
-4. Configure:
-   - **Container Port**: `80` (obrigatório)
-   - **Protocol**: `HTTP` ou `TCP`
-   - **Published Port**: Deixe vazio ou automático
-5. Clique em **"Save"** ou **"Salvar"**
-6. **Agora sim**, faça o deploy ou redeploy
+1. No painel do serviço, vá para a aba **"Domínios"**
+2. Clique em **"Add Domain"** ou **"+ Domínio"**
+3. Configure:
+   - **Domain**: `seu-dominio.com.br`
+   - **Path**: `/`
+   - **Target**: `http://<nome-do-servico>:80/`
+     - Exemplo: `http://site_cv:80/`
+     - Use o nome EXATO do seu serviço no EasyPanel
+4. Ative **HTTPS/SSL** (opcional mas recomendado)
+5. Salve e faça o deploy
 
-**Verificação**: Após o deploy, verifique os logs. O Nginx deve continuar rodando sem receber SIGQUIT.
+**Verificação**: O formato do Target deve ser `http://nome-servico:80/` onde `nome-servico` é o nome do seu serviço no EasyPanel.
 
 #### 4. Variáveis de Ambiente
 
@@ -138,31 +133,29 @@ Para atualizar o CV:
 2025/10/26 05:32:18 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
 ```
 
-**Causa**: O EasyPanel não sabe em qual porta o container está escutando.
+**Possíveis Causas e Soluções**:
 
-**Solução passo-a-passo**:
+#### 1. Proxy não configurado na aba Domínios
 
-1. **Acesse o painel do serviço no EasyPanel**
-2. **Localize a configuração de portas**:
-   - Procure no menu lateral esquerdo
-   - Pode estar em: "Implantações", "Deployments", "Settings", ou "Ports"
-3. **Adicione a porta**:
-   - Clique em "Add Port" ou "+ Port" ou "Adicionar Porta"
-   - **Container Port**: `80`
-   - **Protocol**: Selecione `HTTP` (preferível) ou `TCP`
-   - **Published Port**: Deixe vazio/automático ou `80`
-4. **Salve a configuração**
-5. **Faça o redeploy**:
-   - Vá em "Deployments" ou "Implantações"
-   - Clique em "Redeploy" ou "Deploy novamente"
-6. **Verifique os logs**:
-   - Os logs devem mostrar o Nginx rodando continuamente
-   - NÃO deve aparecer mensagem de SIGQUIT
+**Verificar**:
+1. Vá para aba **"Domínios"** no painel do serviço
+2. Deve haver um domínio configurado com:
+   - **Target**: `http://<nome-servico>:80/`
+   - Exemplo: `http://site_cv:80/`
 
-**Como verificar se a porta está configurada**:
-- No painel do serviço, procure por "Ports" ou "Portas"
-- Deve haver uma entrada com "Container Port: 80"
-- Se não houver, adicione conforme passos acima
+**Solução**: Se não estiver configurado, siga a [seção de Configuração de Domínio](#3-configuração-de-domínio-️-crítico)
+
+#### 2. Nome do serviço incorreto no Target
+
+**Verificar**: O nome no Target (`site_cv` em `http://site_cv:80/`) corresponde ao nome do serviço?
+
+**Solução**: Use o nome EXATO do serviço. Verifique no topo da página do painel.
+
+#### 3. Health check falhando
+
+**Solução**: Faça um redeploy com a versão mais recente do código (que inclui endpoint `/health`)
+
+Para mais detalhes, consulte o [Guia Completo de Deploy](./DEPLOY_EASYPANEL.md).
 
 ### Warning de MIME type duplicado
 

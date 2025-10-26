@@ -50,69 +50,47 @@ Configure os seguintes campos:
 
 ---
 
-## Configuração de Porta (CRÍTICO)
+## Configuração de Domínio e Proxy (CRÍTICO)
 
-### Por que isso é importante?
+### Para Aplicações Web (como este projeto)
 
-Se você não configurar a porta, o container será iniciado mas será **desligado automaticamente** após 2-3 segundos com a mensagem:
+**NÃO use a aba "Ports"** - isso é apenas para aplicações não-web.
 
-```
-[notice] 1#1: signal 3 (SIGQUIT) received, shutting down
-```
+Para aplicações web HTTP/HTTPS, use o **Proxy** na aba **Domínios**:
 
-### Como Configurar a Porta
+### Como Configurar o Proxy
 
-#### Opção 1: Antes do Primeiro Deploy (Recomendado)
-
-1. **Após criar o serviço**, você estará no painel do serviço
-2. **Procure no menu lateral esquerdo** uma das seguintes opções:
-   - "Ports" ou "Portas"
-   - "Deployments" → seção "Ports"
-   - "Settings" → aba "Ports"
-   - "Implantações" → seção "Portas"
-
-3. **Clique em "Add Port"** ou **"+ Port"** ou **"Adicionar Porta"**
-
-4. **Preencha os campos**:
+1. **Vá para a aba "Domínios"** no painel do serviço
+2. **Adicione um domínio** clicando em "Add Domain" ou "+ Domain"
+3. **Configure o proxy**:
    ```
-   Container Port: 80
-   Protocol: HTTP
-   Published Port: (deixe vazio ou automático)
+   Domain: cv.alexandresafarpaim.com.br
+   Path: /
+   Target: http://site_cv:80/
    ```
 
-5. **Clique em "Save"** ou **"Salvar"**
+   Onde:
+   - `site_cv` é o nome do seu serviço no EasyPanel
+   - `80` é a porta do Nginx dentro do container
 
-6. **Agora sim, vá para Deployments e clique em "Deploy"**
+4. **Ative HTTPS** (opcional mas recomendado):
+   - Marque a opção "Enable HTTPS" ou "SSL/TLS"
+   - O EasyPanel gerará automaticamente um certificado Let's Encrypt
 
-#### Opção 2: Após o Deploy (Se já deployou sem configurar)
+5. **Salve as alterações**
 
-Se você já fez o deploy e o container está sendo desligado:
+### Formato do Target
 
-1. **Vá para o painel do serviço**
-2. **Localize "Ports"** no menu lateral
-3. **Adicione a porta** conforme descrito acima:
-   - Container Port: `80`
-   - Protocol: `HTTP`
-4. **Salve as alterações**
-5. **Vá para "Deployments"** ou **"Implantações"**
-6. **Clique em "Redeploy"** ou **"Deploy novamente"**
+O target deve seguir o formato:
+```
+http://<nome-do-servico>:<porta>/
+```
 
-### Variações do EasyPanel
-
-Dependendo da versão do EasyPanel, a localização pode variar:
-
-**Versão 1**:
-- Menu lateral → "Settings" → aba "Ports"
-
-**Versão 2**:
-- Menu lateral → "Deployments" → seção "Ports" (role a página)
-
-**Versão 3**:
-- Menu lateral → "Ports" (direto)
-
-**Se não encontrar**:
-- Procure por um ícone de engrenagem (⚙️) para Settings
-- Procure por qualquer menu relacionado a "Network", "Networking" ou "Rede"
+Exemplos:
+- `http://site_cv:80/` ✅
+- `http://cv:80/` ✅
+- `http://localhost:80/` ❌ (não use localhost)
+- `80` ❌ (formato incorreto)
 
 ---
 
@@ -157,9 +135,45 @@ Dependendo da versão do EasyPanel, a localização pode variar:
 
 **Sintoma**: Logs mostram `signal 3 (SIGQUIT) received, shutting down`
 
-**Causa**: Porta não configurada
+**Logs mostram**:
+```
+2025/10/26 05:32:15 [notice] 1#1: start worker processes
+2025/10/26 05:32:18 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+```
 
-**Solução**: Siga a seção [Configuração de Porta](#configuração-de-porta-crítico) acima
+#### Causa 1: Proxy não configurado
+
+**Solução**: Verifique se o proxy está configurado na aba "Domínios":
+1. Vá para **Domínios** no painel do serviço
+2. Verifique se há um domínio configurado
+3. O Target deve ser: `http://<nome-servico>:80/`
+4. Exemplo: `http://site_cv:80/`
+
+#### Causa 2: Nome do serviço incorreto no Target
+
+**Problema**: O nome do serviço no Target não corresponde ao nome real do serviço.
+
+**Solução**:
+1. Verifique o nome do serviço no EasyPanel (geralmente no topo da página)
+2. O Target deve usar EXATAMENTE esse nome
+3. Exemplo: Se o serviço se chama `site_cv`, use `http://site_cv:80/`
+
+#### Causa 3: Health check falhando
+
+**Problema**: O EasyPanel pode estar verificando a saúde do container e não recebendo resposta.
+
+**Solução**:
+- Este projeto já inclui um endpoint `/health` que retorna 200 OK
+- Após o redeploy com a versão mais recente, o health check deve passar
+
+#### Causa 4: Container não está pronto a tempo
+
+**Problema**: O EasyPanel pode estar terminando o container antes dele estar totalmente inicializado.
+
+**Solução**:
+1. Aguarde o build completo
+2. Verifique os logs para ver se o Nginx iniciou completamente
+3. Se o problema persistir, pode ser necessário configurar um health check customizado no EasyPanel
 
 ### Build falhou
 
